@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+
+  dashboard:
+
+    image: oasees/sample-app-ui
+    ports:
+      - "5000:5000"
+    depends_on:
+      - vibration-sensor
+      - thermal-sensor
+      - pressure-sensor
+      - flow-sensor
+    environment:
+      - SENSORS=vibration-sensor:5000,thermal-sensor:5000,pressure-sensor:5000,flow-sensor:5000
+    networks:
+      - sensor-network
+
+
+  vibration-sensor:
+    image: oasees/sample-app-sensor
+    environment:
+      - SENSOR_TYPE=vibration
+      - SENSOR_NAME=Vibration Monitor
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    networks:
+      - sensor-network
+
+
+  thermal-sensor:
+    image: oasees/sample-app-sensor
+    environment:
+      - SENSOR_TYPE=thermal
+      - SENSOR_NAME=Thermal Monitor
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    networks:
+      - sensor-network
+
+
+  pressure-sensor:
+    image: oasees/sample-app-sensor
+
+    environment:
+      - SENSOR_TYPE=pressure
+      - SENSOR_NAME=Hydraulic Pressure
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    networks:
+      - sensor-network
+    labels:
+      oasees.device: labpc
+      oasees.expose: 32690
+
+  flow-sensor:
+
+    image: oasees/sample-app-sensor
+    environment:
+      - SENSOR_TYPE=flow
+      - SENSOR_NAME=Flow Rate Monitor
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    networks:
+      - sensor-network
+
+networks:
+  sensor-network:
+    driver: bridge
