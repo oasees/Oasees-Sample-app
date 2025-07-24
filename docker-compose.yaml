@@ -53,9 +53,6 @@ services:
       - "5000:5000"
     networks:
       - sensor-network
-    labels:
-      oasees.device: labpc
-      oasees.expose: 32690
 
   flow-sensor:
 
